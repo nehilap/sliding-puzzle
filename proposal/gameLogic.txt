@@ -1,0 +1,8 @@
+Na začiatku sa náhodne rozhádžu políčka hracej plochy.
+1 pozícia bude prázdna, bude sa používat na posúvanie ostatných políčok.
+
+Po každom ťahu sa kontroluje, či je hra vyhratá.
+Ak sú dlaždice usporiadané v poradí ako majú byť a prázdne políčko je na poslednej pozícii, hra je vyhratá.
+
+Hráč si bude voliť, ktoré políčko bude v každom ťahu posunuté na voľnú pozíciu, no posunúť je možné iba tie políčka,
+ktoré susedia s prázdnym poľom.

@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gamestudio</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <link href="/css/puzzle-nehila.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="flex-holder col-flex" id="wrapper">
+    <nav class="flex-holder">
+        <h1>Back to <a href="/">Gamestudio</a>!</h1>
+        <h1>
+            <span th:if="${@userController.logged}">
+                Logged in as '<span th:text="${@userController.loggedUser}"></span>',
+                <a href="/player/logout">Logout</a>
+            </span>
+        </h1>
+    </nav>
+
+    <div class="flex-holder content-section">
+        <div class="flex-holder col-flex centered-half">
+            <span th:if="${not @userController.logged}">Username you wish to use:</span>
+            <span th:if="${@userController.logged}">Change username you wish to use:</span>
+            <input id="userName" minlength="3" placeholder="Pick your username" required type="text"/>
+
+            <input id="userPass" minlength="3" placeholder="Password" required type="password"/>
+            <div>
+                <button onclick="handleUser('login')">Login</button>
+            </div>
+
+            <div th:if="${not @userController.logged}">
+                <button onclick="handleUser('register')">Register</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="message">
+
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // setting up some global variables, mainly using thymeleaf to get values
+    const context = /*[[@{/}]]*/ '/';
+    /*]]>*/
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+
+<script src="/scripts/puzzle-nehila.js"></script>
+
+<script src="/scripts/puzzle-nehila-login.js"></script>
+
+</body>
+</html>

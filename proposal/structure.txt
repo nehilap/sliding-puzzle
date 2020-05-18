@@ -1,0 +1,22 @@
+
+slidePuzzle.main.Main - balík obsahujúci triedu s metódou main.
+
+slidePuzzle.core - základný balík, obsahuje hlavné triedy aplikácie.
+
+slidePuzzle.core - obsahuje triedy definujúce logiku hracieho poľa nezávislé od používateľského rozhrania.
+    Field - reprezentuje hracie pole a jeho funkčnosť. Hracie pole obsahuje dlaždice.
+	rozmer hracej plochy
+	hracia plocha
+	počet akcií
+	
+    Tile - dlaždica hracieho poľa. Dlaždice sú dvoch typov: Empty, Fragment
+    Empty - prázdna dlaždicu, používa sa na zistenie či je voľné miesto na presun
+    Fragment - reprezentuje dlaždicu s časťou obrázka (hodnotou)
+	hodnota - použitá na zistenie či je obrázok správne poskladaný
+    GameState - vyjadruje stav hry.
+
+slidePuzzle.consoleUI - balík obsahujúci triedy ktoré slúžia na hranie hry za pomoci konzolového rozhrania
+
+slidePuzzle.Entity - balík obsahujúci Entitné triedy na prácu s DB
+
+slidePuzzle.service - balík obsahujúci servisné triedy

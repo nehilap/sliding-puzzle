@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sliding Puzzle</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+
+    <link href="/css/puzzle-nehila.css" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="flex-holder col-flex" id="wrapper">
+    <div th:fragment="page">
+        <nav class="flex-holder">
+            <h1>Back to <a href="/">Gamestudio</a>!</h1>
+            <h1 class="header">Sliding Puzzle</h1>
+            <h1>
+                <a href="/player" th:if="${not @userController.logged}">Login</a>
+                <span th:if="${@userController.logged}">
+                Logged in as '<span th:text="${@userController.loggedUser}"></span>',
+                <a href="/player/logout">Logout</a>
+            </span>
+            </h1>
+        </nav>
+
+        <div class="content-section section-end button-bar">
+            <button class="secondary" onclick="showForm()">Start new game</button>
+            <button class="secondary" onclick="toggleTutorial()">Show/hide guide</button>
+            <button class="secondary" onclick="changeGrad()">Change background</button>
+            <button class="secondary" id="hintButton" onclick="toggleHints()">Show/hide hints</button>
+        </div>
+        <div class="hidden content-section flex-item flex-holder section-end col-flex" id="newGameForm">
+            <form action="/puzzle-nehila/new" class="flex-holder col-flex" method="get">
+                <label for="fieldSizeId">Field size: </label>
+                <input class="formEl" id="fieldSizeId" max="5" min="3" name="fieldSize" required type="number"
+                       value="3"/>
+
+                <select class="formEl" name="img" required>
+                    <option selected value="default.jpg">Bird (Pinka lesná)</option>
+                    <option value="fuzac.jpg">Bug (Fúzač)</option>
+                    <option value="hrabos.jpg">Rodent (Hraboš)</option>
+                    <option value="lipen.jpg">Fish (Lipeň)</option>
+                    <option value="mlok.jpg">Newt (Mlok)</option>
+                    <option value="wolf.jpg">Wolf (Vlk)</option>
+                    <option value="numbers">Funky Numbers (Čísla)</option>
+                </select>
+
+                <input class="formEl" name="imgUrl"
+                       placeholder="Image URL" title="You can add image url here if you want to load it from internet"
+                       type="url"/>
+
+                <div class="formEl">
+                    <button type="submit">Start new</button>
+                </div>
+            </form>
+
+            <div>
+                <button class="secondary" onclick="hideForm()" type="button">Cancel</button>
+            </div>
+        </div>
+
+        <section class="content-section hidden flex-item" id="gameGuide">
+            <h3>Sliding puzzle - guide</h3>
+            <div th:text="${@puzzleNehilaController.gameGuide}"></div>
+        </section>
+
+        <section class="content-section flex-item flex-holder space-between">
+            <div>Number of moves: <span th:text="${actionCount}"></span></div>
+            <div class="success" id="solvedMessage" th:if="${@puzzleNehilaController.gameState.toString() == 'SOLVED'}">
+                Congratulations, you solved the puzzle
+            </div>
+        </section>
+
+        <div class="wrapper content-section section-end">
+            <div th:utext="${@puzzleNehilaController.htmlField}"></div>
+        </div>
+
+        <div class="flex-holder content-section section-end">
+            <div class="flex-item-half">
+                <h2>Top scores</h2>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Points</th>
+                        <th>Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="score : ${scores}">
+                        <td th:text="${score.player}"></td>
+                        <td th:text="${score.points}"></td>
+                        <td th:text="${score.playedOnNice}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex-item-half" id="ratings">
+                <div th:fragment="ratings">
+                    <h2>Ratings</h2>
+                    <div class="flex-holder rates align-center">
+                        <span>Average rating:</span>
+                        <span class="stars" th:title="${avgRating}"
+                              th:utext="${@puzzleNehilaController.avgRatingStars}"></span>
+                    </div>
+
+
+                    <div class="flex-holder rates align-center" th:if="${@userController.logged}">
+                        <span>Your rating:</span>
+                        <span class="stars player-stars" th:title="${userRating}"
+                              th:utext="${@puzzleNehilaController.userRatingStars}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-item">
+                <h2>Comments</h2>
+                <div th:if="${@userController.logged}">
+                    <form class="flex-holder form-comm" id="commentForm">
+                        <textarea class="form-comm-text" maxlength="255" minlength="5" name="comm-text"
+                                  placeholder="Add comment" required></textarea>
+                        <button>Send comment</button>
+                    </form>
+                </div>
+                <div>
+                    <form>
+
+                    </form>
+                </div>
+                <div id="comments">
+                    <section class="comment" th:each="comment : ${comments}" th:fragment="comments">
+                        <h5 th:text="${comment.player}"></h5>
+                        <span class="info" th:text="${comment.commentedOnNice}"></span>
+                        <div class="comment-text" th:text="${comment.comment}"></div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // setting up some global variables, mainly using thymeleaf to get values
+
+
+    const colorArray = ['#FF6633', '#FFB399', '#FF33FF', '#fdff5a', '#00B3E6',
+        '#FF6600', '#3366E6', '#999966', '#2eff70', '#B34D4D',
+        '#80B300', '#000000', '#E6B3B3', '#6680B3', '#1AFF33',
+        '#FF99E6', '#CCFF1A', '#FF1A66', '#E60026', '#33FFCC',
+        '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC',
+        '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+        '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680',
+        '#4D8066', '#809980', '#E6FF80', '#66991A', '#999933',
+        '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
+        '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
+    const imgSource = /*[[${@puzzleNehilaController.imgSource}]]*/ 'default.jpg';
+    const imgUrl = /*[[${@puzzleNehilaController.imgUrl}]]*/ '';
+    const loggedUser = /*[[${@userController.loggedUser}]]*/ 'Anonymous';
+    /*]]>*/
+</script>
+
+<script src="/scripts/puzzle-nehila.js"></script>
+
+<script src="/scripts/puzzle-nehila-comment.js"></script>
+
+<script src="/scripts/puzzle-nehila-rate.js"></script>
+
+</body>
+</html>
