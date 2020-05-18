@@ -16,7 +16,7 @@ import sk.tuke.gamestudio.service.ScoreService;
 import sk.tuke.gamestudio.service.restclient.CommentServiceRestClient;
 import sk.tuke.gamestudio.service.restclient.RatingServiceRestClient;
 import sk.tuke.gamestudio.service.restclient.ScoreServiceRestClient;
-
+/*
 @SpringBootApplication
 @Configuration
 @ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "sk.tuke.gamestudio.server.*"))
@@ -62,3 +62,4 @@ public class SpringClient {
 		return new ConsolePrinter();
 	}
 }
+*/
